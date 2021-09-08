@@ -57,6 +57,7 @@ public class HomeFunctionModuleData {
         data.add(new HomeFunctionModuleData(R.mipmap.ico_home_green_curtain, R.string.home_function_name_green_curtain));
         data.add(new HomeFunctionModuleData(FunctionType.Title, R.string.main_content_service));
         data.add(new HomeFunctionModuleData(FunctionType.ModelLottie, R.string.home_function_name_fine_sticker));
+        data.add(new HomeFunctionModuleData(FunctionType.ModelLottie, R.string.home_function_name_fine_test));
         return data;
     }
 

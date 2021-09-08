@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_hello_jnicallback"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        android:id="@+id/hellojniMsg"
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="222dp"
+        app:layout_constraintLeft_toLeftOf="@+id/activity_hello_jnicallback"
+        tools:layout_constraintLeft_creator="0"
+        app:layout_constraintTop_toTopOf="@+id/activity_hello_jnicallback"
+        tools:layout_constraintTop_creator="0"
+        app:layout_constraintRight_toRightOf="@+id/activity_hello_jnicallback"
+        tools:layout_constraintRight_creator="0"
+        tools:layout_constraintBottom_creator="0"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0.42"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <TextView
+        android:text="00:00:00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="124dp"
+        tools:layout_editor_absoluteY="222dp"
+        android:id="@+id/tickView"
+        android:visibility="gone"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        app:layout_constraintLeft_toLeftOf="@+id/activity_hello_jnicallback"
+        app:layout_constraintTop_toTopOf="@+id/activity_hello_jnicallback"
+        app:layout_constraintRight_toRightOf="@+id/activity_hello_jnicallback"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_hello_jnicallback"
+         />
+
+
+    <LinearLayout
+        android:id="@+id/surface_ly"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal">
+        <SurfaceView
+            android:id="@+id/surfaceview1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="fill_parent" />
+        <SurfaceView
+            android:id="@+id/surfaceview2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_height="fill_parent" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/outputImg"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/surface_ly"
+        />
+
+<!--    <Button-->
+<!--        android:id="@+id/c_read"-->
+<!--        android:layout_margin="20dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="4dp"-->
+<!--        android:text="文件写入"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        android:onClick="onFileInput"-->
+<!--        />-->
+
+<!--    <Button-->
+<!--        android:layout_margin="20dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="4dp"-->
+<!--        android:text="二进制写入"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/c_read"-->
+<!--        android:onClick="onByteInput"-->
+<!--        />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

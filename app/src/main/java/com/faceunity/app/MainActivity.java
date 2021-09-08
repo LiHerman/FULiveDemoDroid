@@ -201,6 +201,8 @@ public class MainActivity extends BaseActivity {
             case R.string.home_function_name_human_avatar:
                 startActivity(new Intent(this, AvatarActivity.class));
                 break;
+            case R.string.home_function_name_fine_test:
+                startActivity(new Intent(this, FinetestActivity.class));
             default:
                 ToastHelper.showNormalToast(this, data.titleRes);
         }

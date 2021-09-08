@@ -109,6 +109,10 @@
         <activity android:name=".view.FineStickerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name=".FinetestActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullScreenTheme" />
     </application>
 
 </manifest>
