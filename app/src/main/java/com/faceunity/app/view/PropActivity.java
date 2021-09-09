@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.faceunity.app.base.BaseFaceUnityDemoActivity;
 import com.faceunity.app.data.FaceBeautyDataFactory;
 import com.faceunity.core.enumeration.FUAIProcessorEnum;
 import com.faceunity.core.enumeration.FUAITypeEnum;
@@ -19,7 +20,7 @@ import com.faceunity.ui.entity.PropBean;
  * DESC：道具贴纸
  * Created on 2021/3/2
  */
-public class PropActivity extends BaseFaceUnityActivity {
+public class PropActivity extends BaseFaceUnityDemoActivity {
     private static final String TYPE = "type";
 
     public static void startActivity(Context context, int type) {

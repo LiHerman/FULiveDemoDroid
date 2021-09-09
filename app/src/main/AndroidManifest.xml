@@ -113,6 +113,11 @@
             android:name=".FinetestActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme" />
+
+        <activity
+            android:name=".DemoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullScreenTheme" />
     </application>
 
 </manifest>

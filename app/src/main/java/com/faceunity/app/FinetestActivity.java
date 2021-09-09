@@ -82,9 +82,7 @@ public class FinetestActivity extends AppCompatActivity {
 //        surfaceholder2.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 //        surfaceholder2.addCallback(new surfaceholderCallbackFont());
         surfacetexture=new SurfaceTexture(10);
-
-        mImage = (ImageView) findViewById(R.id.outputImg);
-
+        
 //        justOpen();
     }
 
