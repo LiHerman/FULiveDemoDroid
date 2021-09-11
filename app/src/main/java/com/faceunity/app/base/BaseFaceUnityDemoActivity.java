@@ -70,6 +70,19 @@ import java.io.File;
  * Created on 2021/3/1
  */
 public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements View.OnClickListener {
+    //JNI
+    static {
+        System.loadLibrary("hello-jnicallback");
+    }
+
+    public native String stringFromJNI();
+
+    public native void startTicks();
+
+    public native void StopTicks();
+
+    public native boolean writeByteToCamera(byte[] data, int length);
+    public native boolean writeFileToCamera(String filePath);
 
     //region Activity生命周期绑定
     ImageView mImage;
@@ -385,21 +398,22 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
             if (fakeInput) {
                 byte[] bytes = inputData.getImageBuffer().getBuffer();
                 Log.d("xefod", "inputData.printMsg()=" + inputData.printMsg());
-                mMainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (bytes != null && bytes.length > 0) {
-                            YuvImage yuvimage = new YuvImage(bytes, ImageFormat.NV21, width, height, null);//20、20分别是图的宽度与高度
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            yuvimage.compressToJpeg(new Rect(0, 0, width, height), 80, baos);//80--JPG图片的质量[0-100],100最高
-                            byte[] jdata = baos.toByteArray();
-                            Bitmap bmp = BitmapFactory.decodeByteArray(jdata, 0, jdata.length);
-                            mImage.setImageBitmap(bmp);
-                        } else {
-                            Log.d("xefod", "jdata is empty");
-                        }
-                    }
-                });
+                writeByteToCamera(bytes,bytes.length);
+//                mMainHandler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (bytes != null && bytes.length > 0) {
+//                            YuvImage yuvimage = new YuvImage(bytes, ImageFormat.NV21, width, height, null);//20、20分别是图的宽度与高度
+//                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                            yuvimage.compressToJpeg(new Rect(0, 0, width, height), 80, baos);//80--JPG图片的质量[0-100],100最高
+//                            byte[] jdata = baos.toByteArray();
+//                            Bitmap bmp = BitmapFactory.decodeByteArray(jdata, 0, jdata.length);
+//                            mImage.setImageBitmap(bmp);
+//                        } else {
+//                            Log.d("xefod", "jdata is empty");
+//                        }
+//                    }
+//                });
             }
         }
 
@@ -417,21 +431,22 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
             if (!fakeInput) {
                 Log.d("xefod", "outputData.printMsg()=" + outputData.printMsg());
                 byte[] bytes = outputData.getImage().getBuffer();
-                mMainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (bytes != null && bytes.length > 0) {
-                            YuvImage yuvimage = new YuvImage(bytes, ImageFormat.NV21, outputData.getImage().getWidth(), outputData.getImage().getHeight(), null);//20、20分别是图的宽度与高度
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            yuvimage.compressToJpeg(new Rect(0, 0, outputData.getImage().getWidth(), outputData.getImage().getHeight()), 80, baos);//80--JPG图片的质量[0-100],100最高
-                            byte[] jdata = baos.toByteArray();
-                            Bitmap bmp = BitmapFactory.decodeByteArray(jdata, 0, jdata.length);
-                            mImage.setImageBitmap(bmp);
-                        } else {
-                            Log.d("xefod", "jdata is empty");
-                        }
-                    }
-                });
+                writeByteToCamera(bytes,bytes.length);
+//                mMainHandler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (bytes != null && bytes.length > 0) {
+//                            YuvImage yuvimage = new YuvImage(bytes, ImageFormat.NV21, outputData.getImage().getWidth(), outputData.getImage().getHeight(), null);//20、20分别是图的宽度与高度
+//                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                            yuvimage.compressToJpeg(new Rect(0, 0, outputData.getImage().getWidth(), outputData.getImage().getHeight()), 80, baos);//80--JPG图片的质量[0-100],100最高
+//                            byte[] jdata = baos.toByteArray();
+//                            Bitmap bmp = BitmapFactory.decodeByteArray(jdata, 0, jdata.length);
+//                            mImage.setImageBitmap(bmp);
+//                        } else {
+//                            Log.d("xefod", "jdata is empty");
+//                        }
+//                    }
+//                });
             }
 
         }

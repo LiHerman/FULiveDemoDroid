@@ -25,6 +25,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    externalNativeBuild {
+        cmake {
+//            version '3.18.1'
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
