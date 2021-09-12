@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -378,6 +379,7 @@ public abstract class BaseFaceUnityActivity extends BaseActivity implements View
         @Override
         public void onRenderAfter(@NonNull FURenderOutputData outputData, @NotNull FURenderFrameData frameData) {
             recordingData(outputData, frameData.getTexMatrix());
+            Log.d("xefod", "outputData.printMsg()=" + outputData.printMsg());
         }
 
         @Override

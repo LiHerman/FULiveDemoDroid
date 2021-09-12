@@ -20,7 +20,10 @@
             android:id="@+id/cyt_custom_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
+            <android.opengl.GLSurfaceView
+                android:id="@+id/gl_surface"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
             <ImageButton
                 android:id="@+id/btn_camera_change"
                 android:layout_width="@dimen/x66"
@@ -196,10 +199,7 @@
                 app:focus_width="@dimen/x150"
                 tools:ignore="MissingConstraints" />
 
-            <android.opengl.GLSurfaceView
-                android:id="@+id/gl_surface"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+
         </RelativeLayout>
 
     </FrameLayout>

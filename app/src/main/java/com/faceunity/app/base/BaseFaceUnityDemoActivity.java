@@ -11,6 +11,7 @@ import android.graphics.YuvImage;
 import android.graphics.drawable.ColorDrawable;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -33,6 +34,7 @@ import androidx.annotation.NonNull;
 
 import com.faceunity.app.DemoConfig;
 import com.faceunity.app.R;
+import com.faceunity.app.data.source.PortraitSegmentSource;
 import com.faceunity.app.entity.FunctionConfigModel;
 import com.faceunity.app.utils.FileUtils;
 import com.faceunity.app.utils.SystemUtil;
@@ -81,13 +83,23 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
 
     public native void StopTicks();
 
-    public native boolean writeByteToCamera(byte[] data, int length);
+//    public native boolean writeByteToCamera(byte[] data, int length);
+    public  boolean writeByteToCamera(byte[] data, int length) {
+        return true;
+    }
     public native boolean writeFileToCamera(String filePath);
 
     //region Activity生命周期绑定
     ImageView mImage;
     boolean fakeInput = false;
 
+    //两个维度 4个方向，一共16种可能做遍历
+    public int lastOrient[] = {0,0};
+    public int sucOrient[] = {0,0};
+    public final int angle[] = {0,90,180,270};
+    public boolean detectedFace = false;
+
+    public static final boolean DEBUG = false;
     @Override
     public void onResume() {
         super.onResume();
@@ -104,9 +116,16 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
         mCameraRenderer.onPause();
     }
 
+    private void logWrap(String tag, String content) {
+        if(DEBUG) {
+            Log.d(tag,content);
+        }
+    }
+
 
     @Override
     public void onDestroy() {
+        mCameraRenderer.onPause();
         mCameraRenderer.onDestroy();
         super.onDestroy();
     }
@@ -154,6 +173,14 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
         mVideoRecordHelper = new VideoRecordHelper(this, mOnVideoRecordingListener);
         mPhotoRecordHelper = new PhotoRecordHelper(mOnPhotoRecordingListener);
         mFunctionConfigModel = FunctionConfigModel.functionSwitchMap.get(getFunctionType());
+
+        String saveOrient = PortraitSegmentSource.getCacheOrient();
+        if(!TextUtils.isEmpty(saveOrient)) {
+            detectedFace = true;
+            String [] orient = saveOrient.split(":");
+            sucOrient[0] = Integer.valueOf(orient[0]);
+            sucOrient[1] = Integer.valueOf(orient[1]);
+        }
     }
 
     @Override
@@ -366,20 +393,48 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
         private long mLastOneHundredFrameTimeStamp = 0;
         private long mOneHundredFrameFUTime = 0;
 
+        private int firstLevel = 0;
+        private int sceondLevel = 0;
 
         @Override
         public void onSurfaceCreated() {
+            logWrap("back-debug", "------1 onSurfaceCreated-------");
             configureFURenderKit();
             BaseFaceUnityDemoActivity.this.onSurfaceCreated();
         }
 
         @Override
         public void onSurfaceChanged(int width, int height) {
+            logWrap("back-debug", "------2 onSurfaceChanged-------");
             runOnUiThread(() -> BaseFaceUnityDemoActivity.this.onSurfaceChanged(width, height));
         }
 
         @Override
         public void onRenderBefore(FURenderInputData inputData) {
+            if(!detectedFace) {
+                logWrap("face-out", " before detectedFace: firstLevel = "+ firstLevel + "sceondLevel = "+sceondLevel);
+                inputData.getRenderConfig().setDeviceOrientation(angle[firstLevel]);
+                inputData.getRenderConfig().setDeviceOrientation(angle[sceondLevel]);
+                lastOrient[0] = angle[firstLevel];
+                lastOrient[1] = angle[sceondLevel];
+                if (firstLevel < angle.length - 1 ) {
+                    firstLevel ++;
+                } else if (sceondLevel < angle.length - 1) {
+                    firstLevel = 0;
+                    sceondLevel ++;
+                } else {
+                    firstLevel = 0;
+                    sceondLevel =0;
+                }
+            } else {
+                inputData.getRenderConfig().setDeviceOrientation(sucOrient[0]);
+                inputData.getRenderConfig().setDeviceOrientation(sucOrient[1]);
+                logWrap("face-out", " suc detectedFace: sucOrient[0] = "+ sucOrient[0] + "sucOrient[1]= "+sucOrient[1]);
+            }
+            int device = inputData.getRenderConfig().getDeviceOrientation();
+            int input = inputData.getRenderConfig().getInputOrientation();
+//            inputData.getRenderConfig().setOutputMatrix(FUTransformMatrixEnum.CCROT90);
+            logWrap("back-debug", "------3 onRenderBefore-------device="+device +" input="+input);
             if (isSpecialDevice) {
                 //目前这个是Nexus 6P
                 if (inputData.getRenderConfig().getCameraFacing() == CameraFacingEnum.CAMERA_FRONT) {
@@ -397,7 +452,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
             BaseFaceUnityDemoActivity.this.onRenderBefore(inputData);
             if (fakeInput) {
                 byte[] bytes = inputData.getImageBuffer().getBuffer();
-                Log.d("xefod", "inputData.printMsg()=" + inputData.printMsg());
+                logWrap("xefod", "inputData.printMsg()=" + inputData.printMsg());
                 writeByteToCamera(bytes,bytes.length);
 //                mMainHandler.post(new Runnable() {
 //                    @Override
@@ -410,7 +465,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
 //                            Bitmap bmp = BitmapFactory.decodeByteArray(jdata, 0, jdata.length);
 //                            mImage.setImageBitmap(bmp);
 //                        } else {
-//                            Log.d("xefod", "jdata is empty");
+//                            logWrap("xefod", "jdata is empty");
 //                        }
 //                    }
 //                });
@@ -420,6 +475,8 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
 
         @Override
         public void onRenderAfter(@NonNull FURenderOutputData outputData, @NotNull FURenderFrameData frameData) {
+            logWrap("back-debug", "------4 onRenderAfter-------");
+            Log.d("My-test","onRenderAfter call");
             recordingData(outputData, frameData.getTexMatrix());
             if (outputData == null || outputData.getTexture() == null || outputData.getTexture().getTexId() <= 0) {
                 return;
@@ -429,7 +486,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
             }
             outputData.printMsg();
             if (!fakeInput) {
-                Log.d("xefod", "outputData.printMsg()=" + outputData.printMsg());
+                logWrap("xefod", "outputData.printMsg()=" + outputData.printMsg());
                 byte[] bytes = outputData.getImage().getBuffer();
                 writeByteToCamera(bytes,bytes.length);
 //                mMainHandler.post(new Runnable() {
@@ -443,7 +500,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
 //                            Bitmap bmp = BitmapFactory.decodeByteArray(jdata, 0, jdata.length);
 //                            mImage.setImageBitmap(bmp);
 //                        } else {
-//                            Log.d("xefod", "jdata is empty");
+//                            logWrap("xefod", "jdata is empty");
 //                        }
 //                    }
 //                });
@@ -453,6 +510,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
 
         @Override
         public void onDrawFrameAfter() {
+            logWrap("back-debug", "------5 onDrawFrameAfter-------");
             trackStatus();
             benchmarkFPS();
             BaseFaceUnityDemoActivity.this.onDrawFrameAfter();
@@ -461,6 +519,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
 
         @Override
         public void onSurfaceDestroy() {
+            logWrap("back-debug", "------6 onSurfaceDestroy-------");
             mFURenderKit.release();
         }
 
@@ -478,6 +537,15 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
             } else {
                 trackCount = mFUAIKit.isTracking();
             }
+            logWrap("face-out", "trackCount="+trackCount);
+            if(trackCount == 1 && !detectedFace) {
+                sucOrient = lastOrient;
+                detectedFace = true;
+                String orient = lastOrient[0]+":"+lastOrient[1];
+                PortraitSegmentSource.putCacheOrient(orient);
+                logWrap("face-out", "==========find the detecteFace suc[0]="+sucOrient[0]+"  suc[1]"+sucOrient[1]);
+                logWrap("face-out", "==========find the detecteFace lastOrient[0]="+lastOrient[0]+"  lastOrient[1]"+lastOrient[1]);
+            }
             if (aIProcessTrackStatus != trackCount) {
                 aIProcessTrackStatus = trackCount;
                 runOnUiThread(() -> onTrackStatusChanged(fuaiProcessorEnum, trackCount));
@@ -486,6 +554,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
 
         /*渲染FPS日志*/
         private void benchmarkFPS() {
+            logWrap("back-debug", "------7 benchmarkFPS-------isShowBenchmark="+isShowBenchmark);
             if (!isShowBenchmark) {
                 return;
             }

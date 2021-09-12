@@ -26,6 +26,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class PortraitSegmentSource {
 
     private static final String BG_SEG_CUSTOM_FILEPATH = "bg_seg_custom";
+    private static final String SUC_FACE_ORIENT = "suc_face_orient";
 
     /**
      * 缓存自定义添加人像
@@ -45,6 +46,16 @@ public class PortraitSegmentSource {
     public static String getCachePortraitSegment() {
         SharedPreferences sp = DemoApplication.mApplication.getSharedPreferences(BG_SEG_CUSTOM_FILEPATH, MODE_PRIVATE);
         return sp.getString(BG_SEG_CUSTOM_FILEPATH, "");
+    }
+
+    public static String getCacheOrient() {
+        SharedPreferences sp = DemoApplication.mApplication.getSharedPreferences(BG_SEG_CUSTOM_FILEPATH, MODE_PRIVATE);
+        return sp.getString(SUC_FACE_ORIENT, "");
+    }
+
+    public static void putCacheOrient(String orient) {
+        SharedPreferences sp = DemoApplication.mApplication.getSharedPreferences(BG_SEG_CUSTOM_FILEPATH, MODE_PRIVATE);
+        sp.edit().putString(SUC_FACE_ORIENT, orient).apply();
     }
 
 
