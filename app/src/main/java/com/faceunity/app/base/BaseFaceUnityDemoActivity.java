@@ -99,7 +99,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
     public final int angle[] = {0,90,180,270};
     public boolean detectedFace = false;
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     @Override
     public void onResume() {
         super.onResume();
@@ -113,7 +113,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
             isRecording = false;
             onStopRecord();
         }
-        mCameraRenderer.onPause();
+//        mCameraRenderer.onPause();
     }
 
     private void logWrap(String tag, String content) {

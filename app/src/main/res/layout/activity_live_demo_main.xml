@@ -20,7 +20,7 @@
             android:id="@+id/cyt_custom_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <android.opengl.GLSurfaceView
+            <com.faceunity.app.base.MyGlSurface
                 android:id="@+id/gl_surface"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
