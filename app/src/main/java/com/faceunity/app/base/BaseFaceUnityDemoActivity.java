@@ -116,7 +116,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
 //        mCameraRenderer.onPause();
     }
 
-    private void logWrap(String tag, String content) {
+    public static void logWrap(String tag, String content) {
         if(DEBUG) {
             Log.d(tag,content);
         }

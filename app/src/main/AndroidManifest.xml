@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 悬浮权限-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -118,6 +120,9 @@
             android:name=".DemoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme" />
+
+        <!-- 悬浮窗口 -->
+        <service android:name=".service.Flo" />
     </application>
 
 </manifest>
