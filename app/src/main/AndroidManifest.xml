@@ -122,7 +122,12 @@
             android:theme="@style/FullScreenTheme" />
 
         <!-- 悬浮窗口 -->
-        <service android:name=".service.Flo" />
+        <service android:name=".service.FloatingService" />
+<!--        <receiver android:name="com.faceunity.app.service.HomeWatcherReceiver" >-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.CLOSE_SYSTEM_DIALOGS" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
     </application>
 
 </manifest>

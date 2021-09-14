@@ -4,7 +4,7 @@
     android:layout_height="200dp"
     >
 
-    <com.faceunity.app.base.MyGlSurface
+    <android.opengl.GLSurfaceView
         android:id="@+id/small_gl_surface"
         android:layout_width="100dp"
         android:layout_height="100dp" />

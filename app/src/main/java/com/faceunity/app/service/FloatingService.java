@@ -23,7 +23,9 @@ import androidx.annotation.Nullable;
 import com.faceunity.app.DemoConfig;
 import com.faceunity.app.R;
 import com.faceunity.app.base.BaseFaceUnityDemoActivity;
+import com.faceunity.app.data.PropDataFactory;
 import com.faceunity.app.data.source.PortraitSegmentSource;
+import com.faceunity.app.entity.FunctionEnum;
 import com.faceunity.core.entity.FUCameraConfig;
 import com.faceunity.core.entity.FURenderFrameData;
 import com.faceunity.core.entity.FURenderInputData;
@@ -37,6 +39,7 @@ import com.faceunity.core.faceunity.FURenderKit;
 import com.faceunity.core.listener.OnGlRendererListener;
 import com.faceunity.core.renderer.CameraRenderer;
 import com.faceunity.core.utils.GlUtil;
+import com.faceunity.ui.entity.PropBean;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,10 +55,10 @@ public class FloatingService extends Service {
     static {
         System.loadLibrary("hello-jnicallback");
     }
-    //    public native boolean writeByteToCamera(byte[] data, int length);
-    public  boolean writeByteToCamera(byte[] data, int length) {
-        return true;
-    }
+        public native boolean writeByteToCamera(byte[] data, int length);
+//    public  boolean writeByteToCamera(byte[] data, int length) {
+//        return true;
+//    }
     public native boolean writeFileToCamera(String filePath);
 
     private View floatView;
@@ -90,9 +93,13 @@ public class FloatingService extends Service {
     private float startX = 0;
     private float startY = 0;
 
-    public static void OpenOrFloatWindows(Activity activity) {
-        Intent show = new Intent(activity, FloatingService.class);
-        activity.startService(show);
+    //特效:
+    private int mFunctionType;
+    private PropDataFactory mPropDataFactory;
+
+    public static void OpenOrFloatWindows(Context context) {
+        Intent show = new Intent(context, FloatingService.class);
+        context.startService(show);
     }
 
     public static void closeFloatWindow(Activity activity) {
@@ -108,6 +115,8 @@ public class FloatingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        mFunctionType = FunctionEnum.STICKER;
+        mPropDataFactory = new PropDataFactory(mPropListener, mFunctionType, 1);
         createFloatView();
     }
 
@@ -117,6 +126,13 @@ public class FloatingService extends Service {
         if (intent != null) {
             setupCellView(floatView);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        mPropDataFactory.releaseAIProcessor();
+        mCameraRenderer.onDestroy();
+        super.onDestroy();
     }
 
     /**
@@ -177,6 +193,7 @@ public class FloatingService extends Service {
                 if (isAdded) {
                     wm.removeView(floatView);
                     isAdded = false;
+                    stopSelf();
                 }
             }
         });
@@ -184,7 +201,7 @@ public class FloatingService extends Service {
         mSurfaceView = rootview.findViewById(R.id.small_gl_surface);
         mCameraRenderer = new CameraRenderer(mSurfaceView, getCameraConfig(), mOnGlRendererListener);
         View touch_receiver = (View) rootview.findViewById(R.id.touch_receiver);
-        posx =params.x;
+        posx = params.x;
         touch_receiver.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -233,6 +250,7 @@ public class FloatingService extends Service {
      */
     protected void configureFURenderKit() {
         mFUAIKit.loadAIProcessor(DemoConfig.BUNDLE_AI_FACE, FUAITypeEnum.FUAITYPE_FACEPROCESSOR);
+        mPropDataFactory.bindCurrentRenderer();
     }
 
     /**
@@ -243,6 +261,15 @@ public class FloatingService extends Service {
     protected FUAIProcessorEnum getFURenderKitTrackingType() {
         return FUAIProcessorEnum.FACE_PROCESSOR;
     }
+
+    private PropDataFactory.PropListener mPropListener = new PropDataFactory.PropListener() {
+
+        @Override
+        public void onItemSelected(PropBean bean) {
+
+        }
+    };
+
 
     /* CameraRenderer 回调*/
     private final OnGlRendererListener mOnGlRendererListener = new OnGlRendererListener() {

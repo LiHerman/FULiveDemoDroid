@@ -81,7 +81,7 @@ public abstract class BaseFaceUnityActivity extends BaseActivity implements View
             isRecording = false;
             onStopRecord();
         }
-        mCameraRenderer.onPause();
+        mCameraRenderer.onDestroy();
     }
 
 

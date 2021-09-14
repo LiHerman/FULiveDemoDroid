@@ -20,7 +20,7 @@ import com.faceunity.ui.entity.PropBean;
  * DESC：道具贴纸
  * Created on 2021/3/2
  */
-public class PropActivity extends BaseFaceUnityDemoActivity {
+public class PropActivity extends BaseFaceUnityActivity {
     private static final String TYPE = "type";
 
     public static void startActivity(Context context, int type) {

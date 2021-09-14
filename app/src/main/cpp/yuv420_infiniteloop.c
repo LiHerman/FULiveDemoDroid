@@ -184,3 +184,15 @@ Java_com_faceunity_app_base_BaseFaceUnityDemoActivity_writeFileToCamera__Ljava_l
     copy_frames(setup, deviceId);
     return true;
 }
+
+JNIEXPORT jboolean  JNICALL
+Java_com_faceunity_app_service_FloatingService_writeFileToCamera__Ljava_lang_String_2
+        (JNIEnv *env, jobject object, jstring  param) {
+    return Java_com_faceunity_app_base_BaseFaceUnityDemoActivity_writeFileToCamera__Ljava_lang_String_2(env,object,param);
+}
+
+JNIEXPORT jboolean  JNICALL
+Java_com_faceunity_app_service_FloatingService_writeByteToCamera
+        (JNIEnv *env, jobject object, jbyteArray data, jint length) {
+    return Java_com_faceunity_app_base_BaseFaceUnityDemoActivity_writeByteToCamera(env,object,data,length);
+}

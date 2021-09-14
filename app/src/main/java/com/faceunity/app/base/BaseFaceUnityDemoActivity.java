@@ -113,7 +113,7 @@ public abstract class BaseFaceUnityDemoActivity extends BaseActivity implements 
             isRecording = false;
             onStopRecord();
         }
-//        mCameraRenderer.onPause();
+        mCameraRenderer.onPause();
     }
 
     public static void logWrap(String tag, String content) {
