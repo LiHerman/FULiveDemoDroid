@@ -38,7 +38,7 @@ public class HomeWatcherReceiver extends BroadcastReceiver {
             else if (SYSTEM_DIALOG_REASON_RECENT_APPS.equals(reason)) {
                 // 长按Home键 或者 activity切换键
                 Log.i(LOG_TAG, "long press home key or activity switch");
-
+                FloatingService.OpenOrFloatWindows(context);
             }
             else if (SYSTEM_DIALOG_REASON_LOCK.equals(reason)) {
                 // 锁屏

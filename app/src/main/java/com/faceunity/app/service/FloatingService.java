@@ -123,7 +123,9 @@ public class FloatingService extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
-        if (intent != null) {
+        Log.d("xiale","onStart ");
+        if (intent != null && mSurfaceView==null) {
+            Log.d("xiale","setupCellView(floatView)");
             setupCellView(floatView);
         }
     }
@@ -148,7 +150,7 @@ public class FloatingService extends Service {
         // 设置window type
 //		params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
         if (Build.VERSION.SDK_INT >= 19) {
-            params.type = WindowManager.LayoutParams.TYPE_TOAST;
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
             params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         }
