@@ -149,9 +149,14 @@ public class FloatingService extends Service {
         params.alpha = 1.0f;
         // 设置window type
 //		params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
-        if (Build.VERSION.SDK_INT >= 19) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-        } else {
+        } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1){
+            params.type = WindowManager.LayoutParams.TYPE_PHONE;
+        } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        }
+        else {
             params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         }
 
@@ -371,8 +376,9 @@ public class FloatingService extends Service {
             }
             outputData.printMsg();
             if (!fakeInput) {
-                logWrap("xefod", "outputData.printMsg()=" + outputData.printMsg());
+//                logWrap("xefod", "outputData.printMsg()=" + outputData.printMsg());
                 byte[] bytes = outputData.getImage().getBuffer();
+                logWrap("xefod", "bytes.length=" + bytes.length);
                 writeByteToCamera(bytes,bytes.length);
 //                mMainHandler.post(new Runnable() {
 //                    @Override

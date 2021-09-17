@@ -134,7 +134,7 @@ Java_com_faceunity_app_base_BaseFaceUnityDemoActivity_writeByteToCamera
     jbyte *bytes;
     unsigned char *buf;
     int i;
-    __android_log_write(ANDROID_LOG_DEBUG, TAG, "writeByteToCamera start");
+    __android_log_write(ANDROID_LOG_DEBUG, TAG, "writeByteToCamera start length="+length);
     //从jbytearray获取数据到jbyte*
     bytes = (*env)->GetByteArrayElements(env, data, NULL);
     __android_log_write(ANDROID_LOG_DEBUG, TAG, bytes);
@@ -153,7 +153,8 @@ Java_com_faceunity_app_base_BaseFaceUnityDemoActivity_writeByteToCamera
         setup.device = "/dev/video5";
         setup.frame_width = 1280;
         setup.frame_height = 720;
-        setup.frame_bytes = 40;
+        setup.frame_bytes = 3 * setup.frame_height * setup.frame_width / 2;
+        __android_log_write(ANDROID_LOG_DEBUG, TAG, "frame_bytes = "+setup.frame_bytes);
         deviceId = open_video(setup);
     }
 
